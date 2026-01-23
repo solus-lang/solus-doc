@@ -1,8 +1,0 @@
-# An Introduction to solus
-solus is a simple, experimental embedded language that aims to replace Lua in my projects. I felt Lua was missing many features I loved from other languages so I set out to learn how to make a register based bytecode interpreter, and then build the language and syntax around it. This language had many features planned from the start, but also many features that have been or will be added just because I thought it would be cool.
-
-## The Name
-solus, always styled as lowercase, is a name that has two meanings. The first part is the .sol extension, sol being latin for sun and the sun being the flipside of the moon, which of course the name Lua refers to. And of course, the full name "solus" is another latin word, meaning alone or by oneself. solus is entirely developed by me and all of its choices reflect my own opinions on what is and isn't good in other languages, but also what I feel is feasible for me as a single individual.
-
-## Why Alone?
-If you do want to help with solus, you can do so by either sifting through the code and finding bugs, or by writing code yourself in the language and finding edge cases I may have missed. I hope that by the 1.0 release of this language it'll be something I can seriously be proud to show off, so I'm not really open to working with other people on it directly. Plus, the codebase is written in plain C and not exactly beginner friendly C either, it would take a lot of effort to teach other people to work around my code in ways that I would be satisfied with. And plus, the name would be really fucking dumb if I did that.

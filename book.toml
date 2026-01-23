@@ -1,9 +1,0 @@
-[book]
-title = "solus docs"
-authors = ["septumfunk"]
-language = "en"
-
-[output.html]
-no-section-label = true
-default-theme = "coal"
-preferred-dark-theme = "coal"
