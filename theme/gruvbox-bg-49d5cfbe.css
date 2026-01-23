@@ -1,0 +1,39 @@
+body, .book, .chapter, .book-body, .sidebar, .nav {
+    background: #1d2021 !important;
+    color: #d5c2a1 !important;
+}
+
+a {
+    color: #e09c6e !important;
+}
+
+a:hover {
+    color: #ea6962 !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.book h1, .book h2, .book h3, .book h4, .book h5, .book h6 {
+    color: #dcb06a !important;
+    border-bottom: 1px solid #3c3836 !important;
+}
+
+pre code.hljs {
+    background: #1d2021 !important;
+    color: #d4be98 !important;
+    font-family: monospace;
+    padding: 0.6em;
+    border-radius: 6px;
+    display: block;
+    white-space: pre-wrap;
+}
+
+pre code.hljs .hljs-keyword { color: #ea6962 !important; }
+pre code.hljs .hljs-string { color: #89b482 !important; }
+pre code.hljs .hljs-number { color: #d3869b !important; }
+pre code.hljs .hljs-function { color: #a9b665 !important; }
+pre code.hljs .hljs-type { color: #d8a657 !important; }
+pre code.hljs .hljs-variable { color: #7daea3 !important; }
+pre code.hljs .hljs-comment { color: #928374 !important; font-style: italic; }
+pre code.hljs .hljs-operator { color: #e78a3e !important; }
+pre code.hljs .hljs-built_in { color: #89b482 !important; }
+pre code.hljs .hljs-title { color: #d8a657 !important; }
