@@ -27,6 +27,8 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/gruvbox-cb-34056497.css">
+        <link rel="stylesheet" href="../theme/gruvbox-bg-49d5cfbe.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -34,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "coal";
             const default_dark_theme = "coal";
-            window.path_to_searchindex_js = "../searchindex-e8339c91.js";
+            window.path_to_searchindex_js = "../searchindex-4171e4d4.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-2daf74c7.js"></script>
@@ -182,8 +184,10 @@
 <li><code>val</code>: Any valid value in the solus language</li>
 </ul>
 <h3 id="example"><a class="header" href="#example">Example</a></h3>
-<pre><code class="language-sol">io.print("Hello!");
-</code></pre>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>io.print("Hello!");
+<span class="boring">}</span></code></pre>
 <h2 id="ioprintlnval-any"><a class="header" href="#ioprintlnval-any"><code>io.println(val: any)</code></a></h2>
 <p>Prints the <code>str</code> representation of any value to the console, followed by a newline character and flush</p>
 <h3 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h3>
@@ -191,8 +195,10 @@
 <li><code>val</code>: Any valid value in the solus language</li>
 </ul>
 <h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
-<pre><code class="language-sol">io.println("Hello, World!");
-</code></pre>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>io.println("Hello, World!");
+<span class="boring">}</span></code></pre>
 <h2 id="iotime"><a class="header" href="#iotime"><code>io.time()</code></a></h2>
 <p>Returns the time in seconds since the UNIX epoch</p>
 <h3 id="returns"><a class="header" href="#returns">Returns</a></h3>
@@ -211,9 +217,11 @@
 <li><code>err</code>: The reason for read failure</li>
 </ul>
 <h3 id="example-2"><a class="header" href="#example-2">Example</a></h3>
-<pre><code class="language-sol">let f = io.fread("test.cfg");
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let f = io.fread("test.cfg");
 eval(unwrap(f));
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="iofwritepath-str-content-str"><a class="header" href="#iofwritepath-str-content-str"><code>io.fwrite(path: str, content: str)</code></a></h2>
 <p>Writes the provided string to a file at the specified path</p>
 <h3 id="parameters-3"><a class="header" href="#parameters-3">Parameters</a></h3>
@@ -225,9 +233,11 @@ eval(unwrap(f));
 <li><code>err</code>: The reason for write failure, if encountered</li>
 </ul>
 <h3 id="example-3"><a class="header" href="#example-3">Example</a></h3>
-<pre><code class="language-sol">unwrap(io.fwrite("test.cfg", obj.stringify(default, false)));
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>unwrap(io.fwrite("test.cfg", obj.stringify(default, false)));
 default
-</code></pre>
+<span class="boring">}</span></code></pre>
 
                     </main>
 

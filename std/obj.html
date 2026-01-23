@@ -27,6 +27,8 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/gruvbox-cb-34056497.css">
+        <link rel="stylesheet" href="../theme/gruvbox-bg-49d5cfbe.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -34,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "coal";
             const default_dark_theme = "coal";
-            window.path_to_searchindex_js = "../searchindex-e8339c91.js";
+            window.path_to_searchindex_js = "../searchindex-4171e4d4.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-2daf74c7.js"></script>
@@ -190,11 +192,13 @@
 <li><code>val</code>: The value to store at the specified member name</li>
 </ul>
 <h3 id="example"><a class="header" href="#example">Example</a></h3>
-<pre><code class="language-sol">let o = {};
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let o = {};
 obj.set(o, "wow", 1);
 io.println(o.wow); // 1
 obj.set(o, "Can't do this with . lol", 2);
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="objsetobj-obj-key-str-val-any-1"><a class="header" href="#objsetobj-obj-key-str-val-any-1"><code>obj.set(obj: obj, key: str, val: any)</code></a></h2>
 <p>Gets the object’s member at the specified key. Useful for non identifier friendly member keys</p>
 <h3 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h3>
@@ -208,8 +212,10 @@ obj.set(o, "Can't do this with . lol", 2);
 <li><code>err</code>: If the member does not exist</li>
 </ul>
 <h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
-<pre><code class="language-sol">let x = obj.get(o, "Can with this :)");
-</code></pre>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = obj.get(o, "Can with this :)");
+<span class="boring">}</span></code></pre>
 
                     </main>
 

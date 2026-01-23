@@ -27,6 +27,8 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/gruvbox-cb-34056497.css">
+        <link rel="stylesheet" href="../theme/gruvbox-bg-49d5cfbe.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -34,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "coal";
             const default_dark_theme = "coal";
-            window.path_to_searchindex_js = "../searchindex-e8339c91.js";
+            window.path_to_searchindex_js = "../searchindex-4171e4d4.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-2daf74c7.js"></script>
@@ -187,12 +189,14 @@
 <li><code>err</code>: If the path cannot be found or the execution fails</li>
 </ul>
 <h3 id="example"><a class="header" href="#example">Example</a></h3>
-<pre><code class="language-sol">let module = unwrap(import("module"));
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let module = unwrap(import("module"));
 if type(module) == "err":
     io.println("Failed to load module.sol");
 else:
     io.println(module.version);
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="requirepath-str"><a class="header" href="#requirepath-str"><code>require(path: str)</code></a></h2>
 <p>Loads a solus file and then executes it, behaving identically to import besides the fact that it panics instead of returning an error.</p>
 <h3 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h3>
@@ -205,9 +209,11 @@ else:
 <li><code>panic</code>: If the path cannot be found or the execution fails</li>
 </ul>
 <h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
-<pre><code class="language-sol">let module = require("notfound"); // This will stop execution!
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let module = require("notfound"); // This will stop execution!
 let mod2 = catch([](){ require("notfound") }); // Same as import("notfound")
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="evalsrc-str"><a class="header" href="#evalsrc-str"><code>eval(src: str)</code></a></h2>
 <p>Compiles source code from a string into a <code>fun</code>, note that this is NOT sandboxed and is NOT safe to accept use input with. Treat eval very carefully.</p>
 <h3 id="parameters-2"><a class="header" href="#parameters-2">Parameters</a></h3>
@@ -220,10 +226,12 @@ let mod2 = catch([](){ require("notfound") }); // Same as import("notfound")
 <li><code>err</code>: On compile error or runtime panic</li>
 </ul>
 <h3 id="example-2"><a class="header" href="#example-2">Example</a></h3>
-<pre><code class="language-sol">let cat = "{ meows = 2 paws = 4 }";
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let cat = "{ meows = 2 paws = 4 }";
 let instance = eval(cat);
 io.println(instance.meows); // 2
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="panicerr-str"><a class="header" href="#panicerr-str"><code>panic(err: str)</code></a></h2>
 <p>Creates a runtime <code>panic</code>, solus’ equivalent to an exception pretty much. This will exit the program if it is not DIRECTLY caught.</p>
 <h3 id="parameters-3"><a class="header" href="#parameters-3">Parameters</a></h3>
@@ -235,9 +243,11 @@ io.println(instance.meows); // 2
 <li><code>panic</code>: A fatal error type that exits the program if not caught</li>
 </ul>
 <h3 id="example-3"><a class="header" href="#example-3">Example</a></h3>
-<pre><code class="language-sol">if fatal_err_condition:
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if fatal_err_condition:
     panic("ohhhh shit!");
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="catchtry-fun"><a class="header" href="#catchtry-fun"><code>catch(try: fun)</code></a></h2>
 <p>Catches any <code>panic</code>s thrown within the provided try block’s scope of execution. Think of this as a try/catch that returns a result instead of passing it.</p>
 <h3 id="parameters-4"><a class="header" href="#parameters-4">Parameters</a></h3>
@@ -250,8 +260,10 @@ io.println(instance.meows); // 2
 <li><code>err</code>: The caught panic if one is thrown, converted to an err</li>
 </ul>
 <h3 id="example-4"><a class="header" href="#example-4">Example</a></h3>
-<pre><code class="language-sol">let mod = catch([](){ require("notfound") }); // Same as import("notfound")
-</code></pre>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mod = catch([](){ require("notfound") }); // Same as import("notfound")
+<span class="boring">}</span></code></pre>
 <h2 id="attempttry-fun-handler-funerr"><a class="header" href="#attempttry-fun-handler-funerr"><code>attempt(try: fun, handler: fun(err))</code></a></h2>
 <p>Similar to <code>catch</code> except it uses a proper handler <code>fun</code>, mimicking try/catch behavior in other languages. If `</p>
 <h3 id="parameters-5"><a class="header" href="#parameters-5">Parameters</a></h3>
@@ -264,11 +276,13 @@ io.println(instance.meows); // 2
 <li><code>any</code>: Whatever the provided try <code>fun</code> returns if it succeeds, or whatever the provided handler <code>fun</code> returns</li>
 </ul>
 <h3 id="example-5"><a class="header" href="#example-5">Example</a></h3>
-<pre><code class="language-sol">let mod = attempt(
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mod = attempt(
     []() { return import("doesnt-exist.sol"); },
     [](err) { io.println(err); return {}; }
 );
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="unwrapval-any"><a class="header" href="#unwrapval-any"><code>unwrap(val: any)</code></a></h2>
 <p>Unwraps a variable that is ambiguously value or error, returning either the value or panicking on <code>err</code></p>
 <h3 id="parameters-6"><a class="header" href="#parameters-6">Parameters</a></h3>
@@ -281,8 +295,10 @@ io.println(instance.meows); // 2
 <li><code>panic</code>: <code>val</code> is of type <code>err</code></li>
 </ul>
 <h3 id="example-6"><a class="header" href="#example-6">Example</a></h3>
-<pre><code class="language-sol">let mod = unwrap(import("")); // Panics on failure like require("")
-</code></pre>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mod = unwrap(import("")); // Panics on failure like require("")
+<span class="boring">}</span></code></pre>
 <h2 id="unwrap_orvalid-any-invalid-any"><a class="header" href="#unwrap_orvalid-any-invalid-any"><code>unwrap_or(valid: any, invalid: any)</code></a></h2>
 <p>Returns <code>valid</code> if it is a valid value, or returns <code>invalid</code> if <code>valid</code> is <code>err</code></p>
 <h3 id="parameters-7"><a class="header" href="#parameters-7">Parameters</a></h3>
@@ -295,7 +311,9 @@ io.println(instance.meows); // 2
 <li><code>any</code>: Either <code>valid</code> or <code>invalid</code></li>
 </ul>
 <h3 id="example-7"><a class="header" href="#example-7">Example</a></h3>
-<pre><code class="language-sol">let cfg = unwrap_or(do {
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let cfg = unwrap_or(do {
     let f = io.fread("test.cfg");
     if type(f) == "err": f
     else: eval(f)
@@ -303,7 +321,7 @@ io.println(instance.meows); // 2
     unwrap(io.fwrite("test.cfg", obj.stringify(default, false)));
     default
 });
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="assertcon-bool"><a class="header" href="#assertcon-bool"><code>assert(con: bool)</code></a></h2>
 <p>Throws a <code>panic</code> if the provided condition is false</p>
 <h3 id="parameters-8"><a class="header" href="#parameters-8">Parameters</a></h3>
@@ -311,9 +329,11 @@ io.println(instance.meows); // 2
 <li><code>con</code>: Boolean condition</li>
 </ul>
 <h3 id="example-8"><a class="header" href="#example-8">Example</a></h3>
-<pre><code class="language-sol">assert(1 == 1);
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>assert(1 == 1);
 assert(1 == 2); // Panic
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="typeval-any"><a class="header" href="#typeval-any"><code>type(val: any)</code></a></h2>
 <p>Returns the type of a value represented as a string</p>
 <h3 id="parameters-9"><a class="header" href="#parameters-9">Parameters</a></h3>
@@ -325,12 +345,14 @@ assert(1 == 2); // Panic
 <li><code>str</code>: The typename of the value provided</li>
 </ul>
 <h3 id="example-9"><a class="header" href="#example-9">Example</a></h3>
-<pre><code class="language-sol">let module = unwrap(import("module"));
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let module = unwrap(import("module"));
 if type(module) == "err":
     io.println("Failed to load module.sol");
 else:
     io.println(module.version);
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id=""><a class="header" href="#"><code>()</code></a></h2>
 <h2 id="strval-any"><a class="header" href="#strval-any"><code>str(val: any)</code></a></h2>
 <p>Converts a value of any type into a string representation. Note that this function does not stringify objects, but rather gives a string representation of the pointer.</p>
@@ -343,10 +365,12 @@ else:
 <li><code>str</code>: A string representation of the value at its most basic.</li>
 </ul>
 <h3 id="example-10"><a class="header" href="#example-10">Example</a></h3>
-<pre><code class="language-sol">let x = 4; // i64
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 4; // i64
 let y = {}; // obj
 io.println("x: " + str(x) + ", y: " + str(y)); // "x: 4, y: 0x71d00c0d8"
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="errstr-str"><a class="header" href="#errstr-str"><code>err(str: str)</code></a></h2>
 <p>Constructs an <code>err</code> type from a <code>str</code>. You can return this to represent failure conditions.</p>
 <h3 id="parameters-11"><a class="header" href="#parameters-11">Parameters</a></h3>
@@ -358,11 +382,13 @@ io.println("x: " + str(x) + ", y: " + str(y)); // "x: 4, y: 0x71d00c0d8"
 <li><code>err</code>: An error or failure condition internally represented by a string</li>
 </ul>
 <h3 id="example-11"><a class="header" href="#example-11">Example</a></h3>
-<pre><code class="language-sol">let fun = [](bool) {
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let fun = [](bool) {
     if bool: "success"
     else: err("failure!")
 };
-</code></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="i64f64-f64"><a class="header" href="#i64f64-f64"><code>i64(f64: f64)</code></a></h2>
 <p>Converts an f64 value into the i64 equivalent value. This will result in loss of floating point (decimal) precision.</p>
 <h3 id="parameters-12"><a class="header" href="#parameters-12">Parameters</a></h3>
