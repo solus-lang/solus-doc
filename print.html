@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "coal";
             const default_dark_theme = "coal";
-            window.path_to_searchindex_js = "searchindex-4171e4d4.js";
+            window.path_to_searchindex_js = "searchindex-14f52038.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-2daf74c7.js"></script>
+        <script src="toc-c8a7c3ba.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,6 +183,184 @@
 <h2 id="why-alone"><a class="header" href="#why-alone">Why Alone?</a></h2>
 <p>If you do want to help with solus, you can do so by either sifting through the code and finding bugs, or by writing code yourself in the language and finding edge cases I may have missed. I hope that by the 1.0 release of this language it’ll be something I can seriously be proud to show off, so I’m not really open to working with other people on it directly. Plus, the codebase is written in plain C and not exactly beginner friendly C either, it would take a lot of effort to teach other people to work around my code in ways that I would be satisfied with. And plus, the name would be really fucking dumb if I did that.</p>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="syntax"><a class="header" href="#syntax">Syntax</a></h1>
+<p>The syntax of solus is quite simple, but does deviate from the languages that inspired it quite a bit. It takes influence from Lua, Rust, and C of course because it’s my native language. I wanted the syntax to be easy for a beginner to understand and use but also lend itself well to creative expressiveness by more experienced devs, notably, me.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="core-types"><a class="header" href="#core-types">Core Types</a></h1>
+<p>These are the basic data types that you’ll see anywhere that solus runs, there are also usertypes, but those are up to whatever application embeds the VM to provide.</p>
+<h2 id="fun"><a class="header" href="#fun"><code>fun</code></a></h2>
+<p>A compiled solus function, represented by either bytecode or a C function pointer for API calls. The function call syntax in solus is very conventional, but the function definition syntax may be a little unique for new users. A function in solus is defined first by its <strong>captures</strong> <code>[a, b, c]</code>, then its <strong>arguments</strong> <code>(a, b, c)</code>, and then the function body as a block. Upvalues are automatically promoted so that their lifetime is at least as long as the function, and do not need to be passed as arguments to reference them.</p>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 4;
+let var = [x](a) { // [captures](args)
+    x += a;
+};
+var(2);
+io.println(x); // 6
+<span class="boring">}</span></code></pre>
+<p><strong>Note:</strong> You may also see <strong>captures</strong> referred to as “upvalues.” This is the formal name used internally in the VM.</p>
+<h2 id="obj"><a class="header" href="#obj"><code>obj</code></a></h2>
+<p>An object type, this functions very similarly to tables in Lua or objects in JavaScript. All objects are references and to make a copy of an object you must construct a new one.</p>
+<h3 id="operators"><a class="header" href="#operators">Operators</a></h3>
+<ul>
+<li><code>.</code>: Member access</li>
+</ul>
+<h3 id="construction"><a class="header" href="#construction">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = {
+    member = 2
+    other_member = 3, // Optional commas
+};
+<span class="boring">}</span></code></pre>
+<h2 id="str"><a class="header" href="#str"><code>str</code></a></h2>
+<p>The string type of solus, this type is very simple to work with and lends itself naturally to programmers’ expectations. It does not require any special functions or operators for concatenation.</p>
+<h3 id="operators-1"><a class="header" href="#operators-1">Operators</a></h3>
+<ul>
+<li><code>+</code>: Concatenate</li>
+</ul>
+<h3 id="construction-1"><a class="header" href="#construction-1">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = "str";
+<span class="boring">}</span></code></pre>
+<h2 id="i64"><a class="header" href="#i64"><code>i64</code></a></h2>
+<p>A 64 bit integer, the only integer type supported by solus natively. Although, this may change in the future.</p>
+<h3 id="operators-2"><a class="header" href="#operators-2">Operators</a></h3>
+<ul>
+<li><code>+</code>: Add</li>
+<li><code>-</code>: Subtract</li>
+<li><code>*</code>: Multiply</li>
+<li><code>/</code>: Divide</li>
+</ul>
+<h3 id="construction-2"><a class="header" href="#construction-2">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = 1;
+<span class="boring">}</span></code></pre>
+<h2 id="f64"><a class="header" href="#f64"><code>f64</code></a></h2>
+<p>A 64 bit floating point number, the only floating point type supported by solus natively. Although, this may change in the future.</p>
+<h3 id="operators-3"><a class="header" href="#operators-3">Operators</a></h3>
+<ul>
+<li><code>+</code>: Add</li>
+<li><code>-</code>: Subtract</li>
+<li><code>*</code>: Multiply</li>
+<li><code>/</code>: Divide</li>
+</ul>
+<h3 id="construction-3"><a class="header" href="#construction-3">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = 3.14;
+<span class="boring">}</span></code></pre>
+<h2 id="bool"><a class="header" href="#bool"><code>bool</code></a></h2>
+<p>A value that can only be <code>true</code> (1) or <code>false</code> (0).</p>
+<h3 id="operators-4"><a class="header" href="#operators-4">Operators</a></h3>
+<ul>
+<li><code>!</code>: Inverse</li>
+<li><code>-</code>: Inverse</li>
+</ul>
+<h3 id="construction-4"><a class="header" href="#construction-4">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = true;
+let nvar = !var; // false
+<span class="boring">}</span></code></pre>
+<h2 id="err"><a class="header" href="#err"><code>err</code></a></h2>
+<p>A type representing a failure condition, containing a string for the reason. This is for result-like error handling in solus, without the need for protected calls.</p>
+<h3 id="construction-5"><a class="header" href="#construction-5">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = err("Error!");
+<span class="boring">}</span></code></pre>
+<h2 id="panic"><a class="header" href="#panic"><code>panic</code></a></h2>
+<p>A type that the user cannot handle themselves, a <code>panic</code> is solus’ form of exceptions. Unless caught in a protected call, this will exit the program and show the line where it originated. When caught by <code>catch</code> or <code>attempt</code>, it will be transformed into the <code>err</code> type.</p>
+<h3 id="construction-6"><a class="header" href="#construction-6">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>panic("Critical Failure");
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="keywords-and-expressions"><a class="header" href="#keywords-and-expressions">Keywords and Expressions</a></h1>
+<p>These are words that are reserved by the language for use in expressions, meaning they evaluate into a value, therefore can be assigned to a variable.</p>
+<h2 id="operations"><a class="header" href="#operations">Operations</a></h2>
+<p>There are some basic operations between types built into solus, and these are accessible with familiar and simple operators that you will recognize from maths or other programming languages. <strong>Note:</strong> <code>i64</code> and <code>f64</code> are automatically converted for basic operations with each other, and the target type is always determined by the type of the <strong>left-hand side</strong>.</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 1 + 2;
+let y = 4 / 4;
+x = (x * y) / 3.0;
+<span class="boring">}</span></code></pre>
+<h2 id="self"><a class="header" href="#self"><code>self</code></a></h2>
+<p>Self refers to the future storage location of an object during its construction. You can then capture the object in member functions, getting around the need to have the object passed as an argument to its own methods. Self is not defined in other contexts, and can be used as a name for local variables if you so desire.</p>
+<h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = {
+    count = 3
+    call = [self](){ self.count }
+};
+<span class="boring">}</span></code></pre>
+<h2 id="true-false-nil"><a class="header" href="#true-false-nil"><code>true</code>, <code>false</code>, <code>nil</code></a></h2>
+<p>These represent constants for their respective types, and cannot be overridden or used for names of local variables.</p>
+<h2 id="do-"><a class="header" href="#do-"><code>do {}</code></a></h2>
+<p>Executes a block and evaluates to the trailing return of the block. If the block does not have a trailing return, it will evaluate to <code>nil</code>. This is useful for executing code for function arguments, like this:</p>
+<h3 id="example-1-1"><a class="header" href="#example-1-1">Example</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>io.println(do {
+    let x = 1;
+    x += 3;
+    x
+});
+<span class="boring">}</span></code></pre>
+<h2 id="if-c-a-else-b"><a class="header" href="#if-c-a-else-b"><code>if c: a else: b</code></a></h2>
+<p>The <code>if</code>/<code>else</code> statements can be used as an expression as well, mimicking the ternary operator in other languages. This statment will not work unless you provide an else, as it doesn’t make sense to implicitly return <code>nil</code> here. you can also chain these.</p>
+<h3 id="example-2"><a class="header" href="#example-2">Example</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = true;
+io.println(if x: "true!" else: "false!");
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="statements"><a class="header" href="#statements">Statements</a></h1>
+<p>Statements are the basic building blocks of the solus language and every line consists of either an expression or a statement. Statements do not evaluate to a value, meaning they cannot appear on the right hand side of any expression.</p>
+<h2 id="let-var--val"><a class="header" href="#let-var--val"><code>let var = val</code></a></h2>
+<p>The <code>let</code> statement is used to define a local variable, just like <code>local</code> in Lua or most languages that use it.</p>
+<h3 id="example-3"><a class="header" href="#example-3">Example</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = 1;
+<span class="boring">}</span></code></pre>
+<h2 id="if-c--else-"><a class="header" href="#if-c--else-"><code>if c: {} else: {}</code></a></h2>
+<p>The <code>if</code>/<code>else</code> statements are used to create branching paths in your code based on a condition. These are fundamental to every programming language in existence. Note that <code>if</code>/<code>else</code> do not <em>only</em> exist as statements, but also as an expression (see Expressions section).</p>
+<h3 id="example-1-2"><a class="header" href="#example-1-2">Example</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if cond: {
+    return a;
+} else: {
+    return b;
+}
+// or
+if cond:
+    return a;
+else:
+    return b;
+<span class="boring">}</span></code></pre>
+<h2 id="while-c-"><a class="header" href="#while-c-"><code>while c: {}</code></a></h2>
+<p>The <code>while</code> statement is used to run a block <em>while</em> a specified condition evaluates to true. This is another fundamental building block of programming languages, and works exactly like it does in others.</p>
+<h3 id="example-2-1"><a class="header" href="#example-2-1">Example</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 0;
+while x &lt; 100: {
+    io.println(x);
+    x += 1;
+}
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="the-std"><a class="header" href="#the-std">The STD</a></h1>
 <p>The std, or standard library, are the functions and globals that are built in to the solus language, but aren’t always necessarily available in all solus environments. The standard library is optionally loaded by the C api, and is always loaded in the CLI tool. All values in the global namespace CAN be overridden for now, but it is likely that readonly objects will be added in the future.</p>
 <h2 id="solversion-str"><a class="header" href="#solversion-str"><code>sol.version</code>: <code>str</code></a></h2>
@@ -203,7 +381,7 @@
 <li><code>any</code>: If execution succeeds</li>
 <li><code>err</code>: If the path cannot be found or the execution fails</li>
 </ul>
-<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<h3 id="example-4"><a class="header" href="#example-4">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let module = unwrap(import("module"));
@@ -223,7 +401,7 @@ else:
 <li><code>any</code>: If execution succeeds</li>
 <li><code>panic</code>: If the path cannot be found or the execution fails</li>
 </ul>
-<h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
+<h3 id="example-1-3"><a class="header" href="#example-1-3">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let module = require("notfound"); // This will stop execution!
@@ -240,7 +418,7 @@ let mod2 = catch([](){ require("notfound") }); // Same as import("notfound")
 <li><code>any</code>: On successful evaluation</li>
 <li><code>err</code>: On compile error or runtime panic</li>
 </ul>
-<h3 id="example-2"><a class="header" href="#example-2">Example</a></h3>
+<h3 id="example-2-2"><a class="header" href="#example-2-2">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let cat = "{ meows = 2 paws = 4 }";
@@ -257,7 +435,7 @@ io.println(instance.meows); // 2
 <ul>
 <li><code>panic</code>: A fatal error type that exits the program if not caught</li>
 </ul>
-<h3 id="example-3"><a class="header" href="#example-3">Example</a></h3>
+<h3 id="example-3-1"><a class="header" href="#example-3-1">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>if fatal_err_condition:
@@ -274,7 +452,7 @@ io.println(instance.meows); // 2
 <li><code>any</code>: Whatever the provided try <code>fun</code> returns</li>
 <li><code>err</code>: The caught panic if one is thrown, converted to an err</li>
 </ul>
-<h3 id="example-4"><a class="header" href="#example-4">Example</a></h3>
+<h3 id="example-4-1"><a class="header" href="#example-4-1">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mod = catch([](){ require("notfound") }); // Same as import("notfound")
@@ -444,7 +622,7 @@ io.println("x: " + str(x) + ", y: " + str(y)); // "x: 4, y: 0x71d00c0d8"
 <ul>
 <li><code>val</code>: Any valid value in the solus language</li>
 </ul>
-<h3 id="example-1-1"><a class="header" href="#example-1-1">Example</a></h3>
+<h3 id="example-1-4"><a class="header" href="#example-1-4">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>io.println("Hello, World!");
@@ -466,7 +644,7 @@ io.println("x: " + str(x) + ", y: " + str(y)); // "x: 4, y: 0x71d00c0d8"
 <li><code>str</code>: The string contents of the file on success</li>
 <li><code>err</code>: The reason for read failure</li>
 </ul>
-<h3 id="example-2-1"><a class="header" href="#example-2-1">Example</a></h3>
+<h3 id="example-2-3"><a class="header" href="#example-2-3">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let f = io.fread("test.cfg");
@@ -482,7 +660,7 @@ eval(unwrap(f));
 <ul>
 <li><code>err</code>: The reason for write failure, if encountered</li>
 </ul>
-<h3 id="example-3-1"><a class="header" href="#example-3-1">Example</a></h3>
+<h3 id="example-3-2"><a class="header" href="#example-3-2">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>unwrap(io.fwrite("test.cfg", obj.stringify(default, false)));
@@ -550,7 +728,7 @@ obj.set(o, "Can't do this with . lol", 2);
 <li><code>any</code>: If the member exists</li>
 <li><code>err</code>: If the member does not exist</li>
 </ul>
-<h3 id="example-1-2"><a class="header" href="#example-1-2">Example</a></h3>
+<h3 id="example-1-5"><a class="header" href="#example-1-5">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let x = obj.get(o, "Can with this :)");

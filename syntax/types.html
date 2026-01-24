@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Builtin - solus docs</title>
+        <title>Types - solus docs</title>
 
 
         <!-- Custom HTML head -->
@@ -175,250 +175,111 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="builtin-functions"><a class="header" href="#builtin-functions">Builtin Functions</a></h1>
-<p>These are the functions that are defined in the global namespace, they have no module prefix and are the core functions of the language, its flow, and error handling.</p>
-<h2 id="importpath-str"><a class="header" href="#importpath-str"><code>import(path: str)</code></a></h2>
-<p>Loads a solus file and then executes it. If the file is not found at first and the <code>.sol</code> file extension is not provided, it will attempt to find <code>path + '.sol'</code>.</p>
-<h3 id="parameters"><a class="header" href="#parameters">Parameters</a></h3>
-<ul>
-<li><code>path</code>: The path to the solus file. The .sol extension will be attempted automatically if excluded.</li>
-</ul>
-<h3 id="returns"><a class="header" href="#returns">Returns</a></h3>
-<ul>
-<li><code>any</code>: If execution succeeds</li>
-<li><code>err</code>: If the path cannot be found or the execution fails</li>
-</ul>
+                        <h1 id="core-types"><a class="header" href="#core-types">Core Types</a></h1>
+<p>These are the basic data types that you’ll see anywhere that solus runs, there are also usertypes, but those are up to whatever application embeds the VM to provide.</p>
+<h2 id="fun"><a class="header" href="#fun"><code>fun</code></a></h2>
+<p>A compiled solus function, represented by either bytecode or a C function pointer for API calls. The function call syntax in solus is very conventional, but the function definition syntax may be a little unique for new users. A function in solus is defined first by its <strong>captures</strong> <code>[a, b, c]</code>, then its <strong>arguments</strong> <code>(a, b, c)</code>, and then the function body as a block. Upvalues are automatically promoted so that their lifetime is at least as long as the function, and do not need to be passed as arguments to reference them.</p>
 <h3 id="example"><a class="header" href="#example">Example</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let module = unwrap(import("module"));
-if type(module) == "err":
-    io.println("Failed to load module.sol");
-else:
-    io.println(module.version);
+</span>let x = 4;
+let var = [x](a) { // [captures](args)
+    x += a;
+};
+var(2);
+io.println(x); // 6
 <span class="boring">}</span></code></pre>
-<h2 id="requirepath-str"><a class="header" href="#requirepath-str"><code>require(path: str)</code></a></h2>
-<p>Loads a solus file and then executes it, behaving identically to import besides the fact that it panics instead of returning an error.</p>
-<h3 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h3>
+<p><strong>Note:</strong> You may also see <strong>captures</strong> referred to as “upvalues.” This is the formal name used internally in the VM.</p>
+<h2 id="obj"><a class="header" href="#obj"><code>obj</code></a></h2>
+<p>An object type, this functions very similarly to tables in Lua or objects in JavaScript. All objects are references and to make a copy of an object you must construct a new one.</p>
+<h3 id="operators"><a class="header" href="#operators">Operators</a></h3>
 <ul>
-<li><code>path</code>: The path to the solus file. The .sol extension will be attempted automatically if excluded.</li>
+<li><code>.</code>: Member access</li>
 </ul>
-<h3 id="returns-1"><a class="header" href="#returns-1">Returns</a></h3>
-<ul>
-<li><code>any</code>: If execution succeeds</li>
-<li><code>panic</code>: If the path cannot be found or the execution fails</li>
-</ul>
-<h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
+<h3 id="construction"><a class="header" href="#construction">Construction</a></h3>
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let module = require("notfound"); // This will stop execution!
-let mod2 = catch([](){ require("notfound") }); // Same as import("notfound")
-<span class="boring">}</span></code></pre>
-<h2 id="evalsrc-str"><a class="header" href="#evalsrc-str"><code>eval(src: str)</code></a></h2>
-<p>Compiles source code from a string into a <code>fun</code>, note that this is NOT sandboxed and is NOT safe to accept use input with. Treat eval very carefully.</p>
-<h3 id="parameters-2"><a class="header" href="#parameters-2">Parameters</a></h3>
-<ul>
-<li><code>src</code>: Solus source code stored in a string</li>
-</ul>
-<h3 id="returns-2"><a class="header" href="#returns-2">Returns</a></h3>
-<ul>
-<li><code>any</code>: On successful evaluation</li>
-<li><code>err</code>: On compile error or runtime panic</li>
-</ul>
-<h3 id="example-2"><a class="header" href="#example-2">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let cat = "{ meows = 2 paws = 4 }";
-let instance = eval(cat);
-io.println(instance.meows); // 2
-<span class="boring">}</span></code></pre>
-<h2 id="panicerr-str"><a class="header" href="#panicerr-str"><code>panic(err: str)</code></a></h2>
-<p>Creates a runtime <code>panic</code>, solus’ equivalent to an exception pretty much. This will exit the program if it is not DIRECTLY caught.</p>
-<h3 id="parameters-3"><a class="header" href="#parameters-3">Parameters</a></h3>
-<ul>
-<li><code>err</code>: The reason for the runtime panic</li>
-</ul>
-<h3 id="returns-3"><a class="header" href="#returns-3">Returns</a></h3>
-<ul>
-<li><code>panic</code>: A fatal error type that exits the program if not caught</li>
-</ul>
-<h3 id="example-3"><a class="header" href="#example-3">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>if fatal_err_condition:
-    panic("ohhhh shit!");
-<span class="boring">}</span></code></pre>
-<h2 id="catchtry-fun"><a class="header" href="#catchtry-fun"><code>catch(try: fun)</code></a></h2>
-<p>Catches any <code>panic</code>s thrown within the provided try block’s scope of execution. Think of this as a try/catch that returns a result instead of passing it.</p>
-<h3 id="parameters-4"><a class="header" href="#parameters-4">Parameters</a></h3>
-<ul>
-<li><code>try</code>:  A function that may panic or return an err</li>
-</ul>
-<h3 id="returns-4"><a class="header" href="#returns-4">Returns</a></h3>
-<ul>
-<li><code>any</code>: Whatever the provided try <code>fun</code> returns</li>
-<li><code>err</code>: The caught panic if one is thrown, converted to an err</li>
-</ul>
-<h3 id="example-4"><a class="header" href="#example-4">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let mod = catch([](){ require("notfound") }); // Same as import("notfound")
-<span class="boring">}</span></code></pre>
-<h2 id="attempttry-fun-handler-funerr"><a class="header" href="#attempttry-fun-handler-funerr"><code>attempt(try: fun, handler: fun(err))</code></a></h2>
-<p>Similar to <code>catch</code> except it uses a proper handler <code>fun</code>, mimicking try/catch behavior in other languages. If `</p>
-<h3 id="parameters-5"><a class="header" href="#parameters-5">Parameters</a></h3>
-<ul>
-<li><code>try</code>: A function that may panic or return an err</li>
-<li><code>handler</code>: A handler function that optionally accepts the caught panic/returned error as an <code>err</code></li>
-</ul>
-<h3 id="returns-5"><a class="header" href="#returns-5">Returns</a></h3>
-<ul>
-<li><code>any</code>: Whatever the provided try <code>fun</code> returns if it succeeds, or whatever the provided handler <code>fun</code> returns</li>
-</ul>
-<h3 id="example-5"><a class="header" href="#example-5">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let mod = attempt(
-    []() { return import("doesnt-exist.sol"); },
-    [](err) { io.println(err); return {}; }
-);
-<span class="boring">}</span></code></pre>
-<h2 id="unwrapval-any"><a class="header" href="#unwrapval-any"><code>unwrap(val: any)</code></a></h2>
-<p>Unwraps a variable that is ambiguously value or error, returning either the value or panicking on <code>err</code></p>
-<h3 id="parameters-6"><a class="header" href="#parameters-6">Parameters</a></h3>
-<ul>
-<li><code>val</code>: Either a value or an <code>err</code></li>
-</ul>
-<h3 id="returns-6"><a class="header" href="#returns-6">Returns</a></h3>
-<ul>
-<li><code>any</code>: <code>val</code> is a valid value</li>
-<li><code>panic</code>: <code>val</code> is of type <code>err</code></li>
-</ul>
-<h3 id="example-6"><a class="header" href="#example-6">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let mod = unwrap(import("")); // Panics on failure like require("")
-<span class="boring">}</span></code></pre>
-<h2 id="unwrap_orvalid-any-invalid-any"><a class="header" href="#unwrap_orvalid-any-invalid-any"><code>unwrap_or(valid: any, invalid: any)</code></a></h2>
-<p>Returns <code>valid</code> if it is a valid value, or returns <code>invalid</code> if <code>valid</code> is <code>err</code></p>
-<h3 id="parameters-7"><a class="header" href="#parameters-7">Parameters</a></h3>
-<ul>
-<li><code>valid</code>: A value to check the validity of</li>
-<li><code>invalid</code>: The fallback case if <code>valid</code> is not</li>
-</ul>
-<h3 id="returns-7"><a class="header" href="#returns-7">Returns</a></h3>
-<ul>
-<li><code>any</code>: Either <code>valid</code> or <code>invalid</code></li>
-</ul>
-<h3 id="example-7"><a class="header" href="#example-7">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let cfg = unwrap_or(do {
-    let f = io.fread("test.cfg");
-    if type(f) == "err": f
-    else: eval(f)
-}, do {
-    unwrap(io.fwrite("test.cfg", obj.stringify(default, false)));
-    default
-});
-<span class="boring">}</span></code></pre>
-<h2 id="assertcon-bool"><a class="header" href="#assertcon-bool"><code>assert(con: bool)</code></a></h2>
-<p>Throws a <code>panic</code> if the provided condition is false</p>
-<h3 id="parameters-8"><a class="header" href="#parameters-8">Parameters</a></h3>
-<ul>
-<li><code>con</code>: Boolean condition</li>
-</ul>
-<h3 id="example-8"><a class="header" href="#example-8">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>assert(1 == 1);
-assert(1 == 2); // Panic
-<span class="boring">}</span></code></pre>
-<h2 id="typeval-any"><a class="header" href="#typeval-any"><code>type(val: any)</code></a></h2>
-<p>Returns the type of a value represented as a string</p>
-<h3 id="parameters-9"><a class="header" href="#parameters-9">Parameters</a></h3>
-<ul>
-<li><code>val</code>: Any value possible in the solus language</li>
-</ul>
-<h3 id="returns-8"><a class="header" href="#returns-8">Returns</a></h3>
-<ul>
-<li><code>str</code>: The typename of the value provided</li>
-</ul>
-<h3 id="example-9"><a class="header" href="#example-9">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let module = unwrap(import("module"));
-if type(module) == "err":
-    io.println("Failed to load module.sol");
-else:
-    io.println(module.version);
-<span class="boring">}</span></code></pre>
-<h2 id=""><a class="header" href="#"><code>()</code></a></h2>
-<h2 id="strval-any"><a class="header" href="#strval-any"><code>str(val: any)</code></a></h2>
-<p>Converts a value of any type into a string representation. Note that this function does not stringify objects, but rather gives a string representation of the pointer.</p>
-<h3 id="parameters-10"><a class="header" href="#parameters-10">Parameters</a></h3>
-<ul>
-<li><code>val</code>: A value of any type.</li>
-</ul>
-<h3 id="returns-9"><a class="header" href="#returns-9">Returns</a></h3>
-<ul>
-<li><code>str</code>: A string representation of the value at its most basic.</li>
-</ul>
-<h3 id="example-10"><a class="header" href="#example-10">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let x = 4; // i64
-let y = {}; // obj
-io.println("x: " + str(x) + ", y: " + str(y)); // "x: 4, y: 0x71d00c0d8"
-<span class="boring">}</span></code></pre>
-<h2 id="errstr-str"><a class="header" href="#errstr-str"><code>err(str: str)</code></a></h2>
-<p>Constructs an <code>err</code> type from a <code>str</code>. You can return this to represent failure conditions.</p>
-<h3 id="parameters-11"><a class="header" href="#parameters-11">Parameters</a></h3>
-<ul>
-<li><code>str</code>: The reason of error or failure condition</li>
-</ul>
-<h3 id="returns-10"><a class="header" href="#returns-10">Returns</a></h3>
-<ul>
-<li><code>err</code>: An error or failure condition internally represented by a string</li>
-</ul>
-<h3 id="example-11"><a class="header" href="#example-11">Example</a></h3>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let fun = [](bool) {
-    if bool: "success"
-    else: err("failure!")
+</span>let var = {
+    member = 2
+    other_member = 3, // Optional commas
 };
 <span class="boring">}</span></code></pre>
-<h2 id="i64f64-f64"><a class="header" href="#i64f64-f64"><code>i64(f64: f64)</code></a></h2>
-<p>Converts an f64 value into the i64 equivalent value. This will result in loss of floating point (decimal) precision.</p>
-<h3 id="parameters-12"><a class="header" href="#parameters-12">Parameters</a></h3>
+<h2 id="str"><a class="header" href="#str"><code>str</code></a></h2>
+<p>The string type of solus, this type is very simple to work with and lends itself naturally to programmers’ expectations. It does not require any special functions or operators for concatenation.</p>
+<h3 id="operators-1"><a class="header" href="#operators-1">Operators</a></h3>
 <ul>
-<li><code>f64</code>: An f64 value to be converted into i64</li>
+<li><code>+</code>: Concatenate</li>
 </ul>
-<h3 id="returns-11"><a class="header" href="#returns-11">Returns</a></h3>
+<h3 id="construction-1"><a class="header" href="#construction-1">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = "str";
+<span class="boring">}</span></code></pre>
+<h2 id="i64"><a class="header" href="#i64"><code>i64</code></a></h2>
+<p>A 64 bit integer, the only integer type supported by solus natively. Although, this may change in the future.</p>
+<h3 id="operators-2"><a class="header" href="#operators-2">Operators</a></h3>
 <ul>
-<li><code>i64</code>: The i64 equivalent to the f64 value provided</li>
+<li><code>+</code>: Add</li>
+<li><code>-</code>: Subtract</li>
+<li><code>*</code>: Multiply</li>
+<li><code>/</code>: Divide</li>
 </ul>
-<h2 id="f64i64-i64"><a class="header" href="#f64i64-i64"><code>f64(i64: i64)</code></a></h2>
-<p>Converts an i64 value into the f64 equivalent value. Not all values i64 represents can be represented by f64 accurately.</p>
-<h3 id="parameters-13"><a class="header" href="#parameters-13">Parameters</a></h3>
+<h3 id="construction-2"><a class="header" href="#construction-2">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = 1;
+<span class="boring">}</span></code></pre>
+<h2 id="f64"><a class="header" href="#f64"><code>f64</code></a></h2>
+<p>A 64 bit floating point number, the only floating point type supported by solus natively. Although, this may change in the future.</p>
+<h3 id="operators-3"><a class="header" href="#operators-3">Operators</a></h3>
 <ul>
-<li><code>i64</code>: An f64 value to be converted into i64</li>
+<li><code>+</code>: Add</li>
+<li><code>-</code>: Subtract</li>
+<li><code>*</code>: Multiply</li>
+<li><code>/</code>: Divide</li>
 </ul>
-<h3 id="returns-12"><a class="header" href="#returns-12">Returns</a></h3>
+<h3 id="construction-3"><a class="header" href="#construction-3">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = 3.14;
+<span class="boring">}</span></code></pre>
+<h2 id="bool"><a class="header" href="#bool"><code>bool</code></a></h2>
+<p>A value that can only be <code>true</code> (1) or <code>false</code> (0).</p>
+<h3 id="operators-4"><a class="header" href="#operators-4">Operators</a></h3>
 <ul>
-<li><code>f64</code>: The f64 equivalent to the i64 value provided</li>
+<li><code>!</code>: Inverse</li>
+<li><code>-</code>: Inverse</li>
 </ul>
+<h3 id="construction-4"><a class="header" href="#construction-4">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = true;
+let nvar = !var; // false
+<span class="boring">}</span></code></pre>
+<h2 id="err"><a class="header" href="#err"><code>err</code></a></h2>
+<p>A type representing a failure condition, containing a string for the reason. This is for result-like error handling in solus, without the need for protected calls.</p>
+<h3 id="construction-5"><a class="header" href="#construction-5">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let var = err("Error!");
+<span class="boring">}</span></code></pre>
+<h2 id="panic"><a class="header" href="#panic"><code>panic</code></a></h2>
+<p>A type that the user cannot handle themselves, a <code>panic</code> is solus’ form of exceptions. Unless caught in a protected call, this will exit the program and show the line where it originated. When caught by <code>catch</code> or <code>attempt</code>, it will be transformed into the <code>err</code> type.</p>
+<h3 id="construction-6"><a class="header" href="#construction-6">Construction</a></h3>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>panic("Critical Failure");
+<span class="boring">}</span></code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../std/overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../syntax/overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../std/io.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../syntax/expressions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -428,11 +289,11 @@ io.println("x: " + str(x) + ", y: " + str(y)); // "x: 4, y: 0x71d00c0d8"
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../std/overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../syntax/overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../std/io.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../syntax/expressions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
