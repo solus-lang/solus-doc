@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Builtin - solus docs</title>
+        <title>Builtin - solus 0.6</title>
 
 
         <!-- Custom HTML head -->
@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "coal";
             const default_dark_theme = "coal";
-            window.path_to_searchindex_js = "../searchindex-14f52038.js";
+            window.path_to_searchindex_js = "../searchindex-899478ff.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-c8a7c3ba.js"></script>
@@ -138,7 +138,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">solus docs</h1>
+                    <h1 class="menu-title">solus 0.6</h1>
 
                     <div class="right-buttons">
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
@@ -178,10 +178,10 @@
                         <h1 id="builtin-functions"><a class="header" href="#builtin-functions">Builtin Functions</a></h1>
 <p>These are the functions that are defined in the global namespace, they have no module prefix and are the core functions of the language, its flow, and error handling.</p>
 <h2 id="importpath-str"><a class="header" href="#importpath-str"><code>import(path: str)</code></a></h2>
-<p>Loads a solus file and then executes it. If the file is not found at first and the <code>.sol</code> file extension is not provided, it will attempt to find <code>path + '.sol'</code>.</p>
+<p>Loads a solus file and then executes it. If the file is not found at first and the <code>.solu</code> file extension is not provided, it will attempt to find <code>path + ".solu"</code>, and <code>path + ".solus"</code>.</p>
 <h3 id="parameters"><a class="header" href="#parameters">Parameters</a></h3>
 <ul>
-<li><code>path</code>: The path to the solus file. The .sol extension will be attempted automatically if excluded.</li>
+<li><code>path</code>: The path to the solus file. The .solu extension will be attempted automatically if excluded.</li>
 </ul>
 <h3 id="returns"><a class="header" href="#returns">Returns</a></h3>
 <ul>
@@ -193,7 +193,7 @@
 </span><span class="boring">fn main() {
 </span>let module = unwrap(import("module"));
 if type(module) == "err":
-    io.println("Failed to load module.sol");
+    io.println("Failed to load module.solu");
 else:
     io.println(module.version);
 <span class="boring">}</span></code></pre>
@@ -201,7 +201,7 @@ else:
 <p>Loads a solus file and then executes it, behaving identically to import besides the fact that it panics instead of returning an error.</p>
 <h3 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h3>
 <ul>
-<li><code>path</code>: The path to the solus file. The .sol extension will be attempted automatically if excluded.</li>
+<li><code>path</code>: The path to the solus file. The .solu extension will be attempted automatically if excluded.</li>
 </ul>
 <h3 id="returns-1"><a class="header" href="#returns-1">Returns</a></h3>
 <ul>
@@ -279,7 +279,7 @@ io.println(instance.meows); // 2
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mod = attempt(
-    []() { return import("doesnt-exist.sol"); },
+    []() { return import("doesnt-exist.solu"); },
     [](err) { io.println(err); return {}; }
 );
 <span class="boring">}</span></code></pre>
@@ -349,7 +349,7 @@ assert(1 == 2); // Panic
 </span><span class="boring">fn main() {
 </span>let module = unwrap(import("module"));
 if type(module) == "err":
-    io.println("Failed to load module.sol");
+    io.println("Failed to load module.solu");
 else:
     io.println(module.version);
 <span class="boring">}</span></code></pre>

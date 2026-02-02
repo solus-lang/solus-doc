@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>solus docs</title>
+        <title>solus 0.6</title>
         <meta name="robots" content="noindex">
 
 
@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "coal";
             const default_dark_theme = "coal";
-            window.path_to_searchindex_js = "searchindex-14f52038.js";
+            window.path_to_searchindex_js = "searchindex-899478ff.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-c8a7c3ba.js"></script>
@@ -139,7 +139,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">solus docs</h1>
+                    <h1 class="menu-title">solus 0.6</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -179,7 +179,7 @@
                         <h1 id="an-introduction-to-solus"><a class="header" href="#an-introduction-to-solus">An Introduction to solus</a></h1>
 <p>solus is a simple, experimental embedded language that aims to replace Lua in my projects. I felt Lua was missing many features I loved from other languages so I set out to learn how to make a register based bytecode interpreter, and then build the language and syntax around it. This language had many features planned from the start, but also many features that have been or will be added just because I thought it would be cool.</p>
 <h2 id="the-name"><a class="header" href="#the-name">The Name</a></h2>
-<p>solus, always styled as lowercase, is a name that has two meanings. The first part is the .sol extension, sol being latin for sun and the sun being the flipside of the moon, which of course the name Lua refers to. And of course, the full name “solus” is another latin word, meaning alone or by oneself. solus is entirely developed by me and all of its choices reflect my own opinions on what is and isn’t good in other languages, but also what I feel is feasible for me as a single individual.</p>
+<p>solus, always styled as lowercase, is a latin word meaning alone or by oneself. solus is entirely developed by me and all of its choices reflect my own opinions on what is and isn’t good in other languages, but also what I feel is feasible for me as a single individual. The recommended file extension for solus is <code>.solu</code> due to it being the icon’s name, but <code>.solus</code> is also acceptable.</p>
 <h2 id="why-alone"><a class="header" href="#why-alone">Why Alone?</a></h2>
 <p>If you do want to help with solus, you can do so by either sifting through the code and finding bugs, or by writing code yourself in the language and finding edge cases I may have missed. I hope that by the 1.0 release of this language it’ll be something I can seriously be proud to show off, so I’m not really open to working with other people on it directly. Plus, the codebase is written in plain C and not exactly beginner friendly C either, it would take a lot of effort to teach other people to work around my code in ways that I would be satisfied with. And plus, the name would be really fucking dumb if I did that.</p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -363,18 +363,18 @@ while x &lt; 100: {
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="the-std"><a class="header" href="#the-std">The STD</a></h1>
 <p>The std, or standard library, are the functions and globals that are built in to the solus language, but aren’t always necessarily available in all solus environments. The standard library is optionally loaded by the C api, and is always loaded in the CLI tool. All values in the global namespace CAN be overridden for now, but it is likely that readonly objects will be added in the future.</p>
-<h2 id="solversion-str"><a class="header" href="#solversion-str"><code>sol.version</code>: <code>str</code></a></h2>
+<h2 id="solusversion-str"><a class="header" href="#solusversion-str"><code>solus.version</code>: <code>str</code></a></h2>
 <p>The version string of the solus VM you’re running currently</p>
-<h2 id="solgit-str"><a class="header" href="#solgit-str"><code>sol.git</code>: <code>str</code></a></h2>
+<h2 id="solusgit-str"><a class="header" href="#solusgit-str"><code>solus.git</code>: <code>str</code></a></h2>
 <p>The github repository link for solus :)</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="builtin-functions"><a class="header" href="#builtin-functions">Builtin Functions</a></h1>
 <p>These are the functions that are defined in the global namespace, they have no module prefix and are the core functions of the language, its flow, and error handling.</p>
 <h2 id="importpath-str"><a class="header" href="#importpath-str"><code>import(path: str)</code></a></h2>
-<p>Loads a solus file and then executes it. If the file is not found at first and the <code>.sol</code> file extension is not provided, it will attempt to find <code>path + '.sol'</code>.</p>
+<p>Loads a solus file and then executes it. If the file is not found at first and the <code>.solu</code> file extension is not provided, it will attempt to find <code>path + ".solu"</code>, and <code>path + ".solus"</code>.</p>
 <h3 id="parameters"><a class="header" href="#parameters">Parameters</a></h3>
 <ul>
-<li><code>path</code>: The path to the solus file. The .sol extension will be attempted automatically if excluded.</li>
+<li><code>path</code>: The path to the solus file. The .solu extension will be attempted automatically if excluded.</li>
 </ul>
 <h3 id="returns"><a class="header" href="#returns">Returns</a></h3>
 <ul>
@@ -386,7 +386,7 @@ while x &lt; 100: {
 </span><span class="boring">fn main() {
 </span>let module = unwrap(import("module"));
 if type(module) == "err":
-    io.println("Failed to load module.sol");
+    io.println("Failed to load module.solu");
 else:
     io.println(module.version);
 <span class="boring">}</span></code></pre>
@@ -394,7 +394,7 @@ else:
 <p>Loads a solus file and then executes it, behaving identically to import besides the fact that it panics instead of returning an error.</p>
 <h3 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h3>
 <ul>
-<li><code>path</code>: The path to the solus file. The .sol extension will be attempted automatically if excluded.</li>
+<li><code>path</code>: The path to the solus file. The .solu extension will be attempted automatically if excluded.</li>
 </ul>
 <h3 id="returns-1"><a class="header" href="#returns-1">Returns</a></h3>
 <ul>
@@ -472,7 +472,7 @@ io.println(instance.meows); // 2
 <pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mod = attempt(
-    []() { return import("doesnt-exist.sol"); },
+    []() { return import("doesnt-exist.solu"); },
     [](err) { io.println(err); return {}; }
 );
 <span class="boring">}</span></code></pre>
@@ -542,7 +542,7 @@ assert(1 == 2); // Panic
 </span><span class="boring">fn main() {
 </span>let module = unwrap(import("module"));
 if type(module) == "err":
-    io.println("Failed to load module.sol");
+    io.println("Failed to load module.solu");
 else:
     io.println(module.version);
 <span class="boring">}</span></code></pre>
@@ -669,27 +669,38 @@ default
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="string-module"><a class="header" href="#string-module"><code>string</code> Module</a></h1>
 <p>This module provides functions for manipulating <code>str</code> types. Note that strings in solus can be concatenated using the same <code>+</code> operator as any other value, which is why there is no <code>string.cat(a, b)</code>!</p>
+<h2 id="stringlenstr-str"><a class="header" href="#stringlenstr-str"><code>string.len(str: str)</code></a></h2>
+<p>Returns the length of a string</p>
+<h3 id="parameters-15"><a class="header" href="#parameters-15">Parameters</a></h3>
+<ul>
+<li><code>str</code>: The string to get the length of</li>
+</ul>
+<h3 id="returns-14"><a class="header" href="#returns-14">Returns</a></h3>
+<ul>
+<li><code>i64</code>: The length of the string, in characters</li>
+</ul>
 <h2 id="stringsubstr-str-start-i64-end-i64"><a class="header" href="#stringsubstr-str-start-i64-end-i64"><code>string.sub(str: str, start: i64, end: i64)</code></a></h2>
 <p>Returns a substring using the specified start and end. End must not be before start, and both indices are clamped</p>
-<h3 id="parameters-15"><a class="header" href="#parameters-15">Parameters</a></h3>
+<h3 id="parameters-1-2"><a class="header" href="#parameters-1-2">Parameters</a></h3>
 <ul>
 <li><code>str</code>: The string to slice</li>
 <li><code>start</code>: The start index (starting at 0)</li>
 <li><code>end</code>: The end index</li>
 </ul>
-<h3 id="returns-14"><a class="header" href="#returns-14">Returns</a></h3>
+<h3 id="returns-1-2"><a class="header" href="#returns-1-2">Returns</a></h3>
 <ul>
 <li><code>str</code>: The substring, which may be empty</li>
 </ul>
-<h2 id="stringlenstr-str"><a class="header" href="#stringlenstr-str"><code>string.len(str: str)</code></a></h2>
-<p>Returns the length of a string</p>
-<h3 id="parameters-1-2"><a class="header" href="#parameters-1-2">Parameters</a></h3>
+<h2 id="stringrepeatstr-str-count-i64"><a class="header" href="#stringrepeatstr-str-count-i64"><code>string.repeat(str: str, count: i64)</code></a></h2>
+<p>Repeats a string <code>count</code> amount of times</p>
+<h3 id="parameters-2-2"><a class="header" href="#parameters-2-2">Parameters</a></h3>
 <ul>
-<li><code>str</code>: The string to get the length of</li>
+<li><code>str</code>: The string to repeat</li>
+<li><code>count</code>: Amount of times to repeat <code>str</code></li>
 </ul>
-<h3 id="returns-1-2"><a class="header" href="#returns-1-2">Returns</a></h3>
+<h3 id="returns-2-2"><a class="header" href="#returns-2-2">Returns</a></h3>
 <ul>
-<li><code>i64</code>: The length of the string, in characters</li>
+<li><code>str</code>: Repeated string</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="obj-module"><a class="header" href="#obj-module"><code>obj</code> Module</a></h1>
@@ -750,7 +761,7 @@ obj.set(o, "Can't do this with . lol", 2);
 </ul>
 <h2 id="mathminfa-f64-b-f64"><a class="header" href="#mathminfa-f64-b-f64"><code>math.minf(a: f64, b: f64)</code></a></h2>
 <p>Returns the minimum of two <code>f64</code> values</p>
-<h3 id="returns-2-2"><a class="header" href="#returns-2-2">Returns</a></h3>
+<h3 id="returns-2-3"><a class="header" href="#returns-2-3">Returns</a></h3>
 <ul>
 <li><code>f64</code>: The lower value between parameters <code>a</code> and <code>b</code></li>
 </ul>
